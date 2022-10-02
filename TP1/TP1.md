@@ -9,7 +9,7 @@ Anthony Manikhouth M2LSI2
 - Les **indicateurs** (ou faits) sont des données agrégées qui permettent de mesurer les performances d'une entreprise. Ils sont souvent exprimés en valeurs numériques (ex: chiffre d'affaires, nombre de clients, nombre de ventes, etc.).
 - Les **hiérarchies** dimensionnelles sont des structures hiérarchiques qui permettent de regrouper des données en fonction de leur contexte. Elles sont souvent exprimées en valeurs catégorielles (ex: pays, région, ville, etc.).
 ### Question 2
-
+![ex1q2](ex1.png)
 ## Exercice 2
 ### Question 1
 La **table de faits** est la table qui contient les données agrégées sur les faits d'affaires, donc logiquement celle d'**Action** puisque c'est celle qui permettra d'estimer les revenus. 

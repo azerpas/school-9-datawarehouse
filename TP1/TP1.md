@@ -31,3 +31,4 @@ Formulez trois requêtes différentes qu’on peut poser au DW.
 Foyer (CléFoyer, NomAbonné, AnnéeNaissanceAbonné, Région, SituationFamille, RevenuFoyer, CS, NombreAdulte, NombreEnfant) 
 ```
 ## Exercice 3
+![exercice3](ex3.png)

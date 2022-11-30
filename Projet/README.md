@@ -26,9 +26,15 @@
 ![cube_olap](./2_5.png)
 ### 6. A partir de ce cube, indiquez quelles opérations OLAP (roll up, drill down, slice, dice) il faut appliquer pour obtenir les informations suivantes : 
 #### a. Le cout total des consultations par médecin en 2018 et 2020. 
+- Roll up sur le coût des consultations
+- Slice sur les années 2018 et 2020
 #### b. Le nombre de consultations par jour de la semaine, par spécialité et par sexe du patient. 
+- Roll up sur le nombre de consultations
+- Slice sur le jour de la semaine
+- Dice sur la spécialité et le sexe du patient 
 #### c. Le cout des consultations par patiente pour les mois d’octobre. 
-
+- Roll up sur le coût des consultations
+- Slice sur le mois d’octobre
 # Partie 2 : Manipulation des données Cube
 ### 1. Créez la table client comme suit : 
 ```sql
@@ -99,4 +105,77 @@ Le résultat est le même que la simple requête join car on prend seulement les
 ### 10. Faire une jointure right outer à l'aide d'une requête de sélection.
 ```sql
 select * from commande right join client on commande.codecli = client.codecli;
+```
+### 11. Afficher/sélectionner le nombre de clients.
+```sql
+select count(*) from client;
+```
+`8`
+### 12. Afficher/sélectionner le nombre de pays.
+```sql
+select count(distinct paycli) from client;
+```
+`4`
+### 13. Afficher/sélectionner le nombre de clients par catégorie
+```sql
+select catcli, count(*) from client group by catcli;
+```
+```
+"1"	| "5"
+"2" | "1"
+"3"	| "2"
+```
+### 14. Sélectionnez le nombre de clients par catégorie et par ville
+```sql
+select catcli, vilcli, count(*) from client group by catcli, vilcli;
+```
+```
+"1"	"Lyon"	    "1"
+"1"	"Madrid"	"1"
+"1"	"Paris"	    "1"
+"1"	"Poitiers"	"1"
+"1"	"Sousse"	"1"
+"2"	"Nice"	    "1"
+"3"	"Paris"	    "1"
+"3"	"Rabat" 	"1"
+```
+### 15. Sélectionnez le nombre de clients par catégorie et par ville à l'aide de CUBE. 
+```sql
+select catcli, vilcli, count(*) from client group by cube(catcli, vilcli);
+```
+### 16. Sélectionnez le nombre de clients par catégorie et par ville à l'aide de ROLLUP.
+```sql
+select catcli, vilcli, count(*) from client group by rollup(catcli, vilcli);
+```
+```
+"null"	"null"	"8"
+"1"	"Poitiers"  "1"
+"3"	"Rabat"	    "1"
+"1"	"Sousse"	"1"
+"2"	"Nice"	    "1"
+"3"	"Paris"	    "1"
+"1"	"Madrid"	"1"
+"1"	"Lyon"	    "1"
+"1"	"Paris" 	"1"
+"3"	"null"	    "2"
+"2"	"null"  	"1"
+"1"	"null"  	"5"
+```
+### 17. Trier les clients par ordre décroissant par CACLI 
+```sql
+select * from client order by cacli desc;
+```
+18. Trier les clients en ordre décroissant par CACLI et donnez le Rang. 
+```sql
+select *, row_number() over (order by cacli desc) as rang from client;
+```
+```
+"C8"	"TRAIFORT"	"1"	"Sousse"	"Tunisie"	"20000"	"1"
+"C1"	"VICTOR"	"1"	"Paris"	"France"	"10000"	"2"
+"C7"	"ADAM"	"3"	"Rabat"	"Maroc"	"10000"	"3"
+"C6"	"HUGO"	"3"	"Paris"	"France"	"4000"	"4"
+"C4"	"CORDOUX"	"1"	"Madrid"	"Espagne"	"3000"	"5"
+"C5"	"PUISSANT"	"1"	"Lyon"	"France"	"2000"	"6"
+"C2"	"CAMILLE"	"1"	"Poitiers"	"France"	"2000"	"7"
+"C3"	"UNIQUE"	"2"	"Nice"	"France"	"1500"	"8"
 ```

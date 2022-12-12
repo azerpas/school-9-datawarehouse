@@ -1,6 +1,7 @@
 # Setup d'un DW
 - [Techniques](#techniques-pour-mettre-en-place-un-dw)
-
+- [Réalisation d'un DW en 5 étapes](#cinq-étapes-importantes-pour-la-réalisation-dun-dw)
+- [Principales applications autour d'un ED](#principales-applications-autour-dun-ed)
 
 # Techniques pour mettre en place un DW
 Évolution des besoins et des sources: *démarche itérative*
@@ -62,10 +63,43 @@ Concevoir intégralement le DW, puis créer des divisions plus petites et gérab
 - Cube
 - Vues matérialisées
 ## 2. Acquisition des données
+**Pour** l'alimentation ou la maj du DW
+- MAJ régulière: Besoin d'un outil pour automatiser
+
+**ETL (Extract, Transform, Load)**
+
+### Extraction
+- Sources multiples (BDD, fichiers, ...)
+- Techniques multiples (Push, Pull)
+- Périodique et répétée
+- Difficile: sans perturber OLTP apps
+
+### Transformation
+Rendre les données:
+- Cohérentes
+- Fiables
 
 ## 3. Définition des aspects techniques de la réalisation
+### Contraintes
+- Logicielles
+- Matérielles
+- Humaines
 
 ## 4. Définition des modes de restitution
+- But du process d'entreposage
+- Conditionne svt la conception du DW
+- Toutes les analyses nécessaires doivent être réalisables
+### Types d'outils
+- Outils de requêtage
+- Outils d'analyse
+- Outils de datamining
 
 ## 5. Stratégies d'administration, évolution, maintenance
+Toutes les strat à mettre en palce pour l'administration, l'évolution et la maintenance du DW
 
+# Principales applications autour d'un ED
+- Rapports divers (Reporting)
+- Dashboards
+- Analyse en ligne diverses (OLAP)
+- Fouille de données (Data Mining)
+- Visualisation de données (Data Visualization)

@@ -58,16 +58,64 @@ Supposons qu'un entrepôt de données se compose des trois dimensions temps, mé
 
 ## a) Dessinez un diagramme de schéma pour l'entrepôt de données ci-dessus en utilisant le schéma en étoile. 
 ![Diagramme de schéma en étoile](./ex3a.png)
-## b) En  commençant  par  le  cube  de  base  [jour ;  médecin;  patient],  quelles  opérations OLAP faut-il réaliser pour lister le total des honoraires perçus par chaque médecin en 2020 ?
+## b) En commençant par le cube de base [jour ; médecin; patient], quelles opérations OLAP faut-il réaliser pour lister le total des honoraires perçus par chaque médecin en 2020 ?
 - ROLLUP sur la dimension temps
 - DRILLDOWN sur la dimension annee
 - SLICE sur la dimension medecin
 - DICE sur les honoraires perçus par chaque médecin en 2020
 
-## c) Pour  obtenir  la  même  liste,  écrivez  une  requête  SQL  en  supposant  que  les  données sont  stockées  dans  une  base  de  données  relationnelle  avec  le  schéma  des  frais  (jour, mois, année, médecin, hôpital, patient, cout, charge).
+## c) Pour obtenir la même liste, écrivez une requête SQL en supposant que les données sont stockées dans une base de données relationnelle avec le schéma des frais (jour, mois, année, médecin, hôpital, patient, cout, charge).
 ```sql
 SELECT medecin, SUM(charge) AS total
 FROM frais
 WHERE annee = 2020
 GROUP BY medecin
 ```
+
+# Exercice 4
+La société Eram désire construire un entrepôt de données pour suivre l'évolution de ses ventes de chaussures. Supposant que l’entreprise est dispose de deux magasins « Eram_Paris » et « Eram_Lyon » et vend plusieurs modèles de chaussures.
+
+## 1. Proposez un modèle conceptuel et logique d’entrepôt de données DW_Eram pour observer l’évolution des ventes en termes du nombre total de paires de chaussures vendues par rapport aux axes MOIS, ANNÉE, MAGASIN et MODÈLE. 
+Comme on souhaite observer l'évolution des ventes en termes du nombre total de paires de chaussures vendues par rapport aux axes MOIS, ANNÉE, MAGASIN et MODÈLE, on peut utiliser le schéma en flocon. On a donc un fait `ventes` qui contient les informations sur les ventes de chaussures, et 4 dimensions `mois`, `annee`, `magasin` et `modele`.
+![Diagramme de schéma en flocon](./ex4-1.png)
+
+## 2. Quel est le type du modèle obtenu ? Argumentez.
+Le modèle obtenu est un schéma en flocon, car il y a une seule table de faits et plusieurs tables de dimensions, donc celle de `mois` qui est hierarchisée par `annee`.
+
+## 3. On peut maintenant imaginer que la société désire aussi étudier la répartition de ses ventes suivant d'autres critères, comme Genre (Homme/Femme/Enfant), Pointure, ou encore Couleur. Proposer un nouveau modèle conceptuel de l’entrepôt de données DW_Eram_New en prenant en compte toutes les dimensions anciennes et nouvelles citées ci-dessus.
+![Diagramme de schéma en flocon](./ex4-3.png)
+
+## 4. Soit la représentation relationnelle du data mart Eram_01. Proposez un tableau multidimensionnel pour observer le nombre total de paires de chaussures vendues par rapport aux axes MAGASIN et MODÈLE.
+### a. Tableau multidimensionnel selon les 2 axes MAGASIN et MODÈLE.
+|          | Eram_Paris | Eram_Lyon |
+|----------|------------|-----------|
+| Botte    | 7500       | 7000      |
+| Escarpin | 5000       |           |
+### b. Calculer l’opérateur CUBE sur le data mart Eram_01 avec l’approche ROLAP.
+| Année | Modèle   | Magasin    | Nombre |
+|-------|----------|------------|--------|
+| 2000  | Botte    | Eram_Paris | 5000   |
+| 2000  | Escarpin | Eram_Paris | 1500   |
+| 2000  | Botte    | Eram_Lyon  | 3000   |
+| 2001  | Escarpin | Eram_Paris | 3500   |
+| 2001  | Botte    | Eram_Paris | 2500   |
+| 2001  | Botte    | Eram_Lyon  | 4000   |
+| ---   | -----    | -------    | ----   |
+| Total | Botte    | Eram_Paris | 7500   |
+| Total | Botte    | Eram_Lyon  | 7000   |
+| Total | Escarpin | Eram_Lyon  | 5000   |
+| 2000  | Total    | Eram_Paris | 6500   |
+| 2000  | Total    | Eram_Lyon  | 3000   |
+| 2001  | Total    | Eram_Paris | 6000   |
+| 2000  | Total    | Eram_Lyon  | 4000   |
+| 2000  | Botte    | Total      | 8000   |
+| 2000  | Escarpin | Total      | 1500   |
+| 2001  | Botte    | Total      | 6500   |
+| 2001  | Escarpin | Total      | 3500   |
+| Total | Total    | Eram_Paris | 12500  |
+| Total | Total    | Eram_Lyon  | 7000   |
+| Total | Botte    | Total      | 14500  |
+| Total | Escarpin | Total      | 5000   |
+| 2000  | Total    | Total      | 9500   |
+| 2001  | Total    | Total      | 10000  |
+| Total | Total    | Total      | 19500  |

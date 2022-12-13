@@ -53,4 +53,21 @@ Donnez le nombre de n-uplets de chacune de ces deux vues : (Justifier votre repo
 - Chaque magasin a vendu chaque produit, donc `4*2 = 8 n-uplets` par magasin.
 - Il y a donc `24 + 8 = 32 n-uplets` dans la vue VRollup.
 
+# Exercice 3
+Supposons qu'un entrepôt de données se compose des trois dimensions temps, médecin et patient, et les deux mesures cout et charge, où la charge est la rémunération qu'un médecin facture à un patient pour une visite. 
 
+## a) Dessinez un diagramme de schéma pour l'entrepôt de données ci-dessus en utilisant le schéma en étoile. 
+![Diagramme de schéma en étoile](./ex3a.png)
+## b) En  commençant  par  le  cube  de  base  [jour ;  médecin;  patient],  quelles  opérations OLAP faut-il réaliser pour lister le total des honoraires perçus par chaque médecin en 2020 ?
+- ROLLUP sur la dimension temps
+- DRILLDOWN sur la dimension annee
+- SLICE sur la dimension medecin
+- DICE sur les honoraires perçus par chaque médecin en 2020
+
+## c) Pour  obtenir  la  même  liste,  écrivez  une  requête  SQL  en  supposant  que  les  données sont  stockées  dans  une  base  de  données  relationnelle  avec  le  schéma  des  frais  (jour, mois, année, médecin, hôpital, patient, cout, charge).
+```sql
+SELECT medecin, SUM(charge) AS total
+FROM frais
+WHERE annee = 2020
+GROUP BY medecin
+```
